@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+    <title>SharePoint Carousel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        #carousel {
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="carousel"></div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            // Fetch SharePoint list data
+            $.ajax({
+                url: "https://your-sharepoint-site/_api/web/lists/getbytitle('YourList')/items",
+                method: "GET",
+                headers: { "Accept": "application/json; odata=verbose" },
+                success: function(data) {
+                    var items = data.d.results;
+                    var carouselHtml = '';
+                    items.forEach(function(item) {
+                        // Ensure item data is sanitized
+                        var title = $('<div>').text(item.Title).html();
+                        var description = $('<div>').text(item.Description).html();
+                        carouselHtml += '<div><h3>' + title + '</h3><p>' + description + '</p></div>';
+                    });
+                    $('#carousel').html(carouselHtml);
+                    $('#carousel').slick({
+                        dots: true,
+                        infinite: true,
+                        speed: 500,
+                        slidesToShow: 1,
+                        slidesToScroll: 1
+                    });
+                },
+                error: function(error) {
+                    console.log(JSON.stringify(error));
+                }
+            });
+        });
+    </script>
+</body>
+</html>

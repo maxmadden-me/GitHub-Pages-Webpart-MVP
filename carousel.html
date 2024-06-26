@@ -18,6 +18,18 @@
             margin: auto;
             padding: 20px;
         }
+        .carousel-item {
+            text-align: center;
+        }
+        .client-quote {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .client, .service-type {
+            font-size: 1em;
+            color: gray;
+        }
     </style>
 </head>
 <body>
@@ -37,9 +49,16 @@
                     var carouselHtml = '';
                     items.forEach(function(item) {
                         // Ensure item data is sanitized
-                        var title = $('<div>').text(item.Title).html();
-                        var description = $('<div>').text(item.Description).html();
-                        carouselHtml += '<div><h3>' + title + '</h3><p>' + description + '</p></div>';
+                        var clientQuote = $('<div>').text(item["Client Quotes and Feedback"]).html();
+                        var client = $('<div>').text(item.Client).html();
+                        var serviceType = $('<div>').text(item["Service Type"]).html();
+                        carouselHtml += `
+                            <div class="carousel-item">
+                                <div class="client">${client}</div>
+                                <div class="client-quote">${clientQuote}</div>
+                                <div class="service-type">${serviceType}</div>
+                            </div>
+                        `;
                     });
                     $('#carousel').html(carouselHtml);
                     $('#carousel').slick({
